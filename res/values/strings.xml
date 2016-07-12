@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">启动速度</string>
+    <string name="test_activity">activity测试</string>
+    <string name="test">测试</string>
+    <string name="activity">Activity</string>
+    <string name="clear">清空</string>
+    <string name="displyinfo">未勾选</string>
+    <string name="testinfo">启动信息</string>
+    <string name="startnumber">启动次数</string>
+    <string name="untest">还未测试</string>
+    <string name="define">确定</string>
+    <string name="cancel">取消</string>
+    <string name="setrunnumber">设置测试次数</string>
+    <string name="cleartestinfo">清除测试数据</string>
+    <string name="copyresult">复制所有结果</string>
+</resources>
