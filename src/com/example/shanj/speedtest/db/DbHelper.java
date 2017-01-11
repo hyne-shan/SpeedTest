@@ -68,14 +68,10 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public static void deleteBean(Context context, ActivityData user) {
+    public static void deleteBean(Context context) {
         DbHelper helper = getInstance(context);
         SQLiteDatabase db = helper.getWritableDatabase();
-        String where = ActivityData.ID + "=?";
-        String[] whereArgs = new String[] {
-            user.id + ""
-        };
-        db.delete(TAB_USER, where, whereArgs);
+        db.delete(TAB_USER, null, null);
         db.close();
     }
 
@@ -116,7 +112,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return sortData(users);
     }
 
-    private static List<ActivityData> sortData(List<ActivityData> users){
+    public static List<ActivityData> sortData(List<ActivityData> users){
         Collections.sort(users, new Comparator<ActivityData>() {
             @Override
             public int compare(ActivityData data1, ActivityData data2) {

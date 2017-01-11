@@ -271,7 +271,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         builder.setPositiveButton("清空测试信息", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //情况数据
+                //清空数据
+
+                DbHelper.deleteBean(MainActivity.this);
             }
         });
         builder.create().show();
@@ -371,8 +373,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 publishProgress(count);
                 AppInfo info;
                 ActivityInfo[] infos;
-                //启动规定次数的总时间
-                int toataltime = 0;
                 //记录测试过程中的进度
                 int count = 0;
                 //计算时间
@@ -391,6 +391,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                             (getPackageManager().getLaunchIntentForPackage(app.packagename).getComponent().getClassName())){
                                         info.isMainActvity = 1;
                                     }
+
+                                    //启动规定次数的总时间
+                                    int toataltime = 0;
                                     //计算单个act启动的时间
                                     for (int i = 0; i < number; i++) {
                                         count++;
@@ -399,7 +402,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                         killProcessByPID(info.packagename);
                                         //模拟用户操作，暂停2s
                                         try {
-                                            Thread.sleep(500);
+                                            Thread.sleep(5000);
                                         } catch (InterruptedException e) {
                                             e.printStackTrace();
                                         }
@@ -411,7 +414,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                         Matcher m = p.matcher(temp);
                                         int temptime = Integer.parseInt(m.replaceAll("").trim());
                                         try {
-                                            Thread.sleep(500);
+                                            Thread.sleep(5000);
                                         } catch (InterruptedException e) {
                                             e.printStackTrace();
                                         }
@@ -446,6 +449,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             protected void onPostExecute(Void s) {
                 super.onPostExecute(s);
                 String temp = "";
+                sortData(testActList);
                 for (AppInfo info : testActList) {
                     ActivityData act = new ActivityData();
                     act.activityName = info.activityName;
@@ -477,6 +481,36 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
             }
         }.execute();
+    }
+
+
+    //排序
+    private static List<AppInfo> sortData(List<AppInfo> users){
+        Collections.sort(users, new Comparator<AppInfo>() {
+            @Override
+            public int compare(AppInfo data1, AppInfo data2) {
+                if(data1.packagename.equalsIgnoreCase(data2.packagename)){
+                    boolean ismain1= data1.isMainActvity==1;
+                    boolean ismain2= data2.isMainActvity ==1;
+                    if(ismain1 || ismain2){
+                        return ismain1? -1:1;
+                    }else{
+                        return sortApptime(data1, data2);
+                    }
+                }else{
+                    return sortApptime(data1, data2);
+                }
+            }
+        });
+        return users;
+    }
+
+    private static int sortApptime(AppInfo data1, AppInfo data2){
+        if(data1.startTime >= data2.startTime){
+            return 1;
+        }else{
+            return -1;
+        }
     }
 
 
